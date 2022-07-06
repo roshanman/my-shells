@@ -142,6 +142,8 @@ function get_curl_request_type_parameter_from_bundle_id() {
         type='hollywood'
     elif [[ $bundleID == "com.huami.watch" ]]; then
         type='midong'
+    elif [[ $bundleID == "com.huami.bluetoolth" ]]; then
+        type='toolkit' # 蓝牙小工具
     else
         error_echo "暂不支持的APP种类"
         exit 1
@@ -149,7 +151,7 @@ function get_curl_request_type_parameter_from_bundle_id() {
 }
 
 function get_arch_info_from_ci_server() {
-    archive_info_url="https://api-archive.athuami.com/api/log/notes?versionNumber=$versionCode&versionName=$app_version&type=$type"
+    archive_info_url="https://open.zepp.top/archive/api/log/notes?versionNumber=$versionCode&versionName=$app_version&type=$type"
     echo "$archive_info_url"
 
     archive_json=$(curl -s $archive_info_url)
@@ -170,7 +172,7 @@ function get_arch_info_from_ci_server() {
 
 function download_dsym_from_server() {
     package_save_path="$job_folder/$versionCode.tgz"
-    arch_info_url="https://api-archive.athuami.com/api/log/download?lid=$archive_id&file_type=archive"
+    arch_info_url="https://open.zepp.top/archive/api/log/download?lid=$archive_id&file_type=archive"
     package_download_url=$(curl $arch_info_url | jq ".url" | sed 's/"//g')
 
     if [[ -z $package_download_url ]]; then
@@ -225,12 +227,14 @@ function unzip_dsym_archive_package() {
 }
 
 function is_after_ios15_crash_format_ips() {
-    version=$(echo $os_version | grep -o "\d\+\.\d" | awk -F"." '{print $1}')
-    if [[ $version -ge 15 ]]; then
-        return 0
-    else
-        return 1
-    fi
+    # iOS15的崩溃是JSON格式
+    cat crash.ips | jq > /dev/null
+    # version=$(echo $os_version | grep -o "\d\+\.\d" | awk -F"." '{print $1}')
+    # if [[ $version -ge 15 ]]; then
+    #     return 0
+    # else
+    #     return 1
+    # fi
 }
 
 function start_analysis_crash_file() {
@@ -240,7 +244,7 @@ function start_analysis_crash_file() {
         exit 1
     fi
 
-    if ! is_after_ios15_crash_format_ips >/dev/null; then
+    if is_after_ios15_crash_format_ips >/dev/null; then
         python3 /Applications/Xcode.app/Contents/SharedFrameworks/CoreSymbolicationDT.framework/Versions/A/Resources/CrashSymbolicator.py \
             -d $app_dsym_path \
             -o "$job_folder/$result_file" \

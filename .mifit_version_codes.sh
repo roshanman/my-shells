@@ -1,6 +1,6 @@
 #!/bin/bash
 
-result=$(curl 'https://api-archive.athuami.com/api/log/notes?num=1&type=xiaomi&trigger=&versionCode=&versionName=&versionNumber=&status=1&env=&build_action=&client=iOS')
+result=$(curl 'https://open.zepp.top/archive/api/log/notes?num=1&type=xiaomi&trigger=&versionCode=&versionName=&versionNumber=&status=1&env=&build_action=&client=iOS')
 
 offset=0
 

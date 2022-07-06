@@ -1,6 +1,6 @@
 #!/bin/bash
 
-result=$(curl --location --request GET 'https://api-archive.athuami.com/api/log/notes?num=1&type=midong&trigger=&versionCode=&versionName=&versionNumber=&status=1&env=&app_backup=zepp&build_action=&client=iOS')
+result=$(curl --location --request GET 'https://open.zepp.top/archive/api/log/notes?num=1&type=midong&trigger=&versionCode=&versionName=&versionNumber=&status=1&env=&app_backup=zepp&build_action=&client=iOS')
 
 offset=0
 
