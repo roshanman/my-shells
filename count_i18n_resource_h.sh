@@ -109,21 +109,16 @@ function get_swift_regx_patter_with_folder() {
 function count_every_i18n_res() {
     for i18n in $(merge_swift_oc_i18n_res); do
 
-        echo $i18n 
+        oc_regx=$(get_oc_regex_with_i18n_foler_and_key "$i18n")
 
-        # swift_regx=$(get_swift_regex_with_i18n_folder_and_key "$i18n")
-        # oc_regx=$(get_oc_regex_with_i18n_foler_and_key "$i18n")
-
-        # echo $swift_regx">"$oc_regx
-
-        # objc=$(grep -E -r -o -l --include="*.h" --include="*.m" "$oc_regx")
+        objc=$(grep -E -r -o --include="*.h" "$oc_regx")
         # swift=$(grep -E -r -o -l --include="*.swift" "$swift_regx")
 
         # # count_swift=$(echo "$swift" | grep "\./" | wc -l)
         # # count_objc=$(echo "$objc" | grep "\./" | wc -l)
         # # count=$(($count_swift + $count_objc))
 
-        # echo "\n## $index ${i18n}""\n$objc""\n$swift"
+        echo "\n## ${i18n}""\n$objc"
 
     done
 }
