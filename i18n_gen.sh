@@ -108,6 +108,6 @@ for i in $(cat $file | grep "^//" | awk '{print $2,$3}'); do
         continue
     fi
 
-    echo "/// $ky $zh_hans_value"
+    echo "/// $folder #@# $key #@# $zh_hans_value"
     echo "$key"" = ""$en_value"";"
 done
