@@ -79,26 +79,26 @@ function print_arch_info() {
 }
 
 function get_os_version_from_ips_file() {
-    os_version=$(cat $crash_file | grep "OS Version:" | awk -F ":" '{print $2}')
+    os_version=$(cat $crash_file | grep "OS Version:" | awk -F ":" '{print $2}' | head -1)
     os_version=$(echo $os_version | grep -o "\w.*")
 
     if [ -z $os_version ]; then
-        os_version=$(cat $crash_file | grep -o "os_version\":\"[^\"]\+" | awk -F"\"" '{print $3}')
+        os_version=$(cat $crash_file | grep -o "os_version\":\"[^\"]\+" | awk -F"\"" '{print $3}' | head -1)
     fi
 }
 
 function get_hard_ware_from_ips_file() {
-    hard_ware=$(cat $crash_file | grep "Hardware Model:" | awk -F ":" '{print $2}')
+    hard_ware=$(cat $crash_file | grep "Hardware Model:" | awk -F ":" '{print $2}' | head -1)
     hard_ware=$(echo $hard_ware | sed 's/ //g')
 
     if [ -z $hard_ware ]; then
-        hard_ware=$(cat $crash_file | grep -o "modelCode.*iPhone.*\"" | awk -F"\"" '{print $(NF-1)}')
+        hard_ware=$(cat $crash_file | grep -o "modelCode.*iPhone.*\"" | awk -F"\"" '{print $(NF-1)}' | head -1)
     fi
 }
 
 # 12位数字build no
 function get_build_version_from_ips_file() {
-    versionCode=$(cat $crash_file | grep -o '"build_version":"\d\{12\}' | grep -o "\d\{12\}")
+    versionCode=$(cat $crash_file | grep -o '"build_version":"\d\{12\}' | grep -o "\d\{12\}" | head -1)
 
     if [ -z $versionCode ]; then
         versionCode=$(cat $crash_file | grep "^Version:" | grep -o "\d\{12\}")
@@ -111,10 +111,10 @@ function get_build_version_from_ips_file() {
 }
 
 function get_app_version_from_ips_file() {
-    app_version=$(cat $crash_file | grep "^Version:.*$versionCode.*" | sed 's/$versionCode//g' | grep -o "\d\+\.\d\+\.\d\+")
+    app_version=$(cat $crash_file | grep "^Version:.*$versionCode.*" | sed 's/$versionCode//g' | grep -o "\d\+\.\d\+\.\d\+" | head -1)
 
     if [[ -z $app_version ]]; then
-        app_version=$(cat $crash_file | grep -o "app_version\":\"\d\+.\d\+.\d\+" | awk -F"\"" '{print $3}')
+        app_version=$(cat $crash_file | grep -o "app_version\":\"\d\+.\d\+.\d\+" | awk -F"\"" '{print $3}' | head -1)
     fi
 
     if [[ -z $app_version ]]; then
@@ -124,9 +124,9 @@ function get_app_version_from_ips_file() {
 }
 
 function get_bundle_id_from_ips_file() {
-    bundleID=$(cat $crash_file | grep -o '"bundleID":"[a-z,0-9,A-Z,\.]*' | cut -d'"' -f4)
+    bundleID=$(cat $crash_file | grep -o '"bundleID":"[a-z,0-9,A-Z,\.]*' | cut -d'"' -f4 | head -1)
     if [ -z $bundleID ]; then
-        bundleID=$(cat $crash_file | grep "^Identifier:" | awk -F":" '{print $2}' | awk -F" " '{print $1}')
+        bundleID=$(cat $crash_file | grep "^Identifier:" | awk -F":" '{print $2}' | awk -F" " '{print $1}' | head -1)
     fi
 
     if [ -z $bundleID ]; then
