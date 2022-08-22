@@ -4,7 +4,7 @@ bindir = $(prefix)/bin
 build:
 	echo "nothing to build"
 
-install: 
+install: build
 	cp ".auto_crash.sh" "$(bindir)/auto_crash"
 
 uninstall:
