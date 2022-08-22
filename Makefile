@@ -1,6 +1,9 @@
 prefix ?= /usr/local
 bindir = $(prefix)/bin
 
+build:
+	echo "nothing to build"
+
 install: 
 	cp ".auto_crash.sh" "$(bindir)/auto_crash"
 
