@@ -8,10 +8,12 @@ while true; do
     version_name=$(echo $result | jq  ".detail[$offset].versionName")
     version_number=$(echo $result | jq  ".detail[$offset].version_number")
     version_code=$(echo $result | jq  ".detail[$offset].versionCode")
+    current_commit=$(echo $result | jq  ".detail[$offset].currentCommit")
+    
     if [[ $version_name == "null" ]];then
         break;
     fi
-    echo $(echo "$version_name : $version_number : $version_code" | sed 's/"//g')
+    echo $(echo "$version_name : $version_number : $version_code" : $current_commit | sed 's/"//g')
     offset=$((offset+1))
 done 
 
